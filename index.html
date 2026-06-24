@@ -348,6 +348,7 @@
       font-weight: 600;
       color: var(--cor-primaria);
       line-height: 1;
+      white-space: nowrap;
     }
     .stat-label {
       font-size: 11px; font-weight: 500; letter-spacing: 0.15em;
@@ -363,14 +364,26 @@
       font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
       color: var(--cor-texto-light-sec); margin-bottom: 24px;
     }
-    .seen-in-logos {
-      display: flex; justify-content: center; align-items: center;
-      gap: 40px; flex-wrap: wrap; opacity: 0.4;
+    .seen-in-slider {
+      position: relative; height: 150px; width: 100%; overflow: hidden;
     }
-    .seen-in-logos span {
-      font-family: 'Playfair Display', serif;
-      font-size: 16px; color: var(--cor-texto-light-sec);
-      font-style: italic;
+    .seen-in-track {
+      display: flex; align-items: center; height: 100%;
+      gap: 108px; width: max-content;
+      animation: logos-slide 36s linear infinite;
+    }
+    .seen-in-track img {
+      height: 90px; width: auto; flex-shrink: 0; display: block;
+    }
+    .seen-in-blur {
+      position: absolute; top: 0; height: 100%;
+      width: 300px; pointer-events: none; z-index: 2;
+    }
+    .seen-in-blur-left  { left: 0;  background: linear-gradient(to right, var(--cor-fundo-dark) 0%, transparent 100%); }
+    .seen-in-blur-right { right: 0; background: linear-gradient(to left,  var(--cor-fundo-dark) 0%, transparent 100%); }
+    @keyframes logos-slide {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
     }
 
     /* ===== SERVICES ===== */
@@ -1597,8 +1610,25 @@
             </div>
             <div className="seen-in">
               <div className="seen-in-label">{t.stats.seen}</div>
-              <div className="seen-in-logos">
-                <span>Jornal O Imparcial</span><span>OAB Notícias</span><span>Migalhas</span><span>IBDP</span>
+              <div className="seen-in-slider">
+                {(() => {
+                  const logos = [
+                    { src: 'assets/MU-jornalimparcial2.png', alt: 'Jornal O Imparcial' },
+                    { src: 'assets/MU-logooab2.png',          alt: 'OAB Notícias' },
+                    { src: 'assets/MU-logomigalhas2.png',     alt: 'Migalhas' },
+                    { src: 'assets/MU-logoibdp2.png',         alt: 'IBDP' },
+                  ];
+                  const items = [...logos,...logos,...logos,...logos,...logos,...logos];
+                  return (
+                    <div className="seen-in-track">
+                      {items.map((l, i) => (
+                        <img key={i} src={l.src} alt={l.alt} loading="lazy" />
+                      ))}
+                    </div>
+                  );
+                })()}
+                <div className="seen-in-blur seen-in-blur-left" aria-hidden="true" />
+                <div className="seen-in-blur seen-in-blur-right" aria-hidden="true" />
               </div>
             </div>
           </div>
